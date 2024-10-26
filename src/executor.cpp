@@ -35,12 +35,14 @@ bool Executor::draw_sprite(ushort operation, byte vx, byte vy) {
   return changed;
 }
 
-int Executor::execute(ushort operation, Instruction instruction) {
+int Executor::execute(ushort operation, Instruction instruction,
+                      ushort lastKey) {
   byte vx = util::get_nth_nibble(operation, 2),
        vy = util::get_nth_nibble(operation, 1);
 
   bool increment = true;
   short op;
+  static byte waitingKey = 0x00;
   switch (instruction) {
   case Instruction::RETURN_SUBROUTINE:
     pc = stack[--sp];
@@ -106,7 +108,7 @@ int Executor::execute(ushort operation, Instruction instruction) {
   case Instruction::SHIFT_VY_RIGHT_VX:
     op = nregister[vy] & 0x01;
     nregister[vx] = nregister[vy] >> 1;
-    nregister[15] = op; 
+    nregister[15] = op;
     break;
   case Instruction::SUB_VX_VY:
     op = nregister[vy] - nregister[vx];
@@ -134,12 +136,31 @@ int Executor::execute(ushort operation, Instruction instruction) {
     else
       nregister[15] = 0x00;
     break;
+  case Instruction::SKIP_IF_PRESSED:
+    if (lastKey & (1 << nregister[vx]))
+      increment_pc();
+    break;
+  case Instruction::SKIP_IF_NPRESSED:
+    if (!(lastKey & (1 << nregister[vx])))
+      increment_pc();
+    break;
   case Instruction::ADD_INDEX_VX:
     iregister += nregister[vx];
     break;
   case Instruction::STORE_BIN_DEC_VX:
     for (int i = 0; i < 3; i++)
       memory[iregister + i] = (nregister[vx] / ((int)pow(10, 2 - i))) % 10;
+    break;
+  case Instruction::STORE_VX_KEY:
+    if (lastKey == 0x00)
+      increment = false;
+    else if (waitingKey == 0x00) {
+        nregister[vx] = waitingKey = (byte)std::log2(lastKey);
+        increment= false;
+    } else if (lastKey & (1 << waitingKey))
+      increment = false;
+    else
+      waitingKey = 0x00;
     break;
   case Instruction::STORE_VX_RANGE:
     for (int i = 0; i <= vx; i++)
