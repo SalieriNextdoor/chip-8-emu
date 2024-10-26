@@ -21,7 +21,7 @@ class Executor {
 
 public:
   Executor(byte *memory);
-  int execute(ushort operation, Instruction instruction);
+  int execute(ushort operation, Instruction instruction, ushort lastKey);
 
   bool inline valid_instruction() const {
     return pc >= START_INSTRUCTIONS && pc < END_INSTRUCTIONS;

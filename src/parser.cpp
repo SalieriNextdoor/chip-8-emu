@@ -31,6 +31,8 @@ Instruction Parser::read_F_operations(ushort operation) {
     return Instruction::ADD_INDEX_VX;
   case 0xF033:
     return Instruction::STORE_BIN_DEC_VX;
+  case 0xF00A:
+    return Instruction::STORE_VX_KEY;
   case 0xF055:
     return Instruction::STORE_VX_RANGE;
   case 0xF065:
@@ -43,6 +45,12 @@ Instruction Parser::read(ushort operation) {
   switch (operation & 0xF000) {
   case 0xF000:
     return read_F_operations(operation);
+  case 0xE000:
+    operation &= 0x00FF;
+    if (operation == 0x9E)
+      return Instruction::SKIP_IF_PRESSED;
+    else if (operation == 0xA1)
+      return Instruction::SKIP_IF_NPRESSED;
   case 0xD000:
     return Instruction::DRAW_SPRITE;
   case 0xA000:

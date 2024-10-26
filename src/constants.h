@@ -32,7 +32,7 @@ namespace emulation {
 using ushort = unsigned short;
 using uint = unsigned int;
 const ushort START_INSTRUCTIONS = 0x200;
-const ushort END_INSTRUCTIONS = 0xE8F;
+const ushort END_INSTRUCTIONS = 0xFFF;
 const uint MEM_SIZE = 4096;
 const uint STACK_SIZE = 16;
 const uint NREGISTERS = 16;
