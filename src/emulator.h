@@ -19,6 +19,8 @@ class Emulator {
 
   long sz;
 
+  void setFonts(const byte *fonts, uint length, ushort startAddr = FONT_START_ADDR);
+
   ushort fetch();
 
   void processInput(GLFWwindow *window);
