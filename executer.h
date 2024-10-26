@@ -15,7 +15,7 @@ class Executer {
   ushort iregister = 0;
   ushort pc = START_INSTRUCTIONS;
 
-  char pixels[screen::W_WIDTH * screen::W_HEIGHT] = {0};
+  byte pixels[screen::W_WIDTH * screen::W_HEIGHT / emulation::SPRITE_WIDTH] = {0};
 
   bool draw_sprite(ushort operation, byte vx, byte vy);
 
@@ -29,7 +29,7 @@ public:
   void inline increment_pc() { pc += 2; }
   ushort getpc() const { return pc; };
 
-  char *getpixels() { return pixels; }
+  byte *getpixels() { return pixels; }
 };
 }; // namespace emulation
 
