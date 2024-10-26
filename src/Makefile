@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -g
 LDFLAGS = -lGL -lGLU -lglfw -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -ldl -lXinerama -lXcursor
 
-OBJECTS = glad.o emulator.o executor.o parser.o screen.o
+OBJECTS = glad.o emulator.o executor.o parser.o screen.o util.o
 
 INCLUDES = shader.h screen.h
 

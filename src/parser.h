@@ -23,6 +23,8 @@ enum class Instruction {
   SHIFT_VY_LEFT_VX,
   SKIP_VX_NEQUAL_VY,
   ILOAD_INDEX,
+  RANDOM_VX,
+  JUMP_V0,
   DRAW_SPRITE,
   SKIP_IF_PRESSED,
   SKIP_IF_NPRESSED,
@@ -31,7 +33,6 @@ enum class Instruction {
   STORE_VX_KEY,
   STORE_VX_RANGE,
   LOAD_VX_RANGE,
-  DO_NOTHING,
 };
 
 using ushort = unsigned short;
