@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <stdexcept>
 using namespace emulation;
 
 Instruction Parser::read_reg_binary_operations(ushort operation) {
@@ -21,24 +22,28 @@ Instruction Parser::read_reg_binary_operations(ushort operation) {
     return Instruction::SUB_VX_VY;
   case 0x800E:
     return Instruction::SHIFT_VY_LEFT_VX;
+  default:
+    throw std::runtime_error("Invalid operation \'" +
+                             std::to_string(operation) + "\'");
   }
-  return Instruction::DO_NOTHING;
 }
 
 Instruction Parser::read_F_operations(ushort operation) {
   switch (operation & 0xF0FF) {
+  case 0xF00A:
+    return Instruction::STORE_VX_KEY;
   case 0xF01E:
     return Instruction::ADD_INDEX_VX;
   case 0xF033:
     return Instruction::STORE_BIN_DEC_VX;
-  case 0xF00A:
-    return Instruction::STORE_VX_KEY;
   case 0xF055:
     return Instruction::STORE_VX_RANGE;
   case 0xF065:
     return Instruction::LOAD_VX_RANGE;
+  default:
+    throw std::runtime_error("Invalid operation \'" +
+                             std::to_string(operation) + "\'");
   }
-  return Instruction::DO_NOTHING;
 }
 
 Instruction Parser::read(ushort operation) {
@@ -53,6 +58,10 @@ Instruction Parser::read(ushort operation) {
       return Instruction::SKIP_IF_NPRESSED;
   case 0xD000:
     return Instruction::DRAW_SPRITE;
+  case 0xC000:
+    return Instruction::RANDOM_VX;
+  case 0xB000:
+    return Instruction::JUMP_V0;
   case 0xA000:
     return Instruction::ILOAD_INDEX;
   case 0x9000:
@@ -80,6 +89,8 @@ Instruction Parser::read(ushort operation) {
       return Instruction::CLEAR_SCR;
     else
       return Instruction::CALL_SUBROUTINE;
+  default:
+    throw std::runtime_error("Invalid operation \'" +
+                             std::to_string(operation) + "\'");
   }
-  return Instruction::DO_NOTHING;
 }

@@ -3,6 +3,8 @@
 #include "util.h"
 #include <cmath>
 #include <cstring>
+#include <random>
+#include <stdexcept>
 using namespace emulation;
 
 Executor::Executor(byte *memory) : memory{memory} {}
@@ -130,6 +132,13 @@ int Executor::execute(ushort operation, Instruction instruction,
   case Instruction::ILOAD_INDEX:
     iregister = util::get_addr(operation);
     break;
+  case Instruction::RANDOM_VX:
+    nregister[vx] = util::random_byte() & util::get_nth_byte(operation, 0);
+    break;
+  case Instruction::JUMP_V0:
+    pc = util::get_addr(operation) + nregister[0];
+    increment = false;
+    break;
   case Instruction::DRAW_SPRITE:
     if (draw_sprite(operation, vx, vy))
       nregister[15] = 0x01;
@@ -155,8 +164,8 @@ int Executor::execute(ushort operation, Instruction instruction,
     if (lastKey == 0x00)
       increment = false;
     else if (waitingKey == 0x00) {
-        nregister[vx] = waitingKey = (byte)std::log2(lastKey);
-        increment= false;
+      nregister[vx] = waitingKey = (byte)std::log2(lastKey);
+      increment = false;
     } else if (lastKey & (1 << waitingKey))
       increment = false;
     else
@@ -170,8 +179,8 @@ int Executor::execute(ushort operation, Instruction instruction,
     for (int i = 0; i <= vx; i++)
       nregister[i] = memory[iregister++];
     break;
-  case Instruction::DO_NOTHING:
-    break;
+  default:
+    throw std::runtime_error("Invalid operation \'" + std::to_string(operation) + "\'");
   }
 
   if (increment)
