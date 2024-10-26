@@ -104,7 +104,9 @@ int Executor::execute(ushort operation, Instruction instruction) {
       nregister[15] = 0x01;
     break;
   case Instruction::SHIFT_VY_RIGHT_VX:
+    op = nregister[vy] & 0x01;
     nregister[vx] = nregister[vy] >> 1;
+    nregister[15] = op; 
     break;
   case Instruction::SUB_VX_VY:
     op = nregister[vy] - nregister[vx];
@@ -115,7 +117,9 @@ int Executor::execute(ushort operation, Instruction instruction) {
       nregister[15] = 0x01;
     break;
   case Instruction::SHIFT_VY_LEFT_VX:
+    op = (nregister[vy] >> 7) & 0x01;
     nregister[vx] = nregister[vy] << 1;
+    nregister[15] = op;
     break;
   case Instruction::SKIP_VX_NEQUAL_VY:
     if (nregister[vx] != nregister[vy])
