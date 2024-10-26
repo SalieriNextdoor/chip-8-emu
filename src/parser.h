@@ -5,6 +5,7 @@ namespace emulation {
 enum class Instruction {
   RETURN_SUBROUTINE,
   CLEAR_SCR,
+  MACHINE_CALL_SUBROUTINE,
   JUMP,
   CALL_SUBROUTINE,
   SKIP_VX_EQUAL_N,

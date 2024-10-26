@@ -52,6 +52,8 @@ int Executor::execute(ushort operation, Instruction instruction,
   case Instruction::CLEAR_SCR:
     memset(pixels, 0, screen::W_WIDTH * screen::W_HEIGHT / 8);
     break;
+  case Instruction::MACHINE_CALL_SUBROUTINE:
+    break; // operation 0NNN is ignored in modern interpreters
   case Instruction::JUMP:
     pc = util::get_addr(operation);
     increment = false;

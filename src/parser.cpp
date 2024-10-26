@@ -90,7 +90,7 @@ Instruction Parser::read(ushort operation) {
     else if (operation == 0x00E0)
       return Instruction::CLEAR_SCR;
     else
-      return Instruction::CALL_SUBROUTINE;
+      return Instruction::MACHINE_CALL_SUBROUTINE;
   default:
     throw std::runtime_error("Invalid operation \'" +
                              std::to_string(operation) + "\'");
