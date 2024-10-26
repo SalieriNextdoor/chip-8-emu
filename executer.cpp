@@ -9,24 +9,28 @@ Executer::Executer(byte *memory) : memory{memory} {}
 
 bool Executer::draw_sprite(ushort operation, byte vx, byte vy) {
   byte height = util::get_nth_nibble(operation, 0);
-  byte xshift, yshift;
-  ushort pos;
-  byte pixel;
+  byte xshift = nregister[vx], xrelshift = xshift % 8;
+  // pixel position. the y axis needs to be flipped
+  ushort pos =
+      (screen::W_WIDTH / 8) * (screen::W_HEIGHT - nregister[vy]) + xshift / 8;
   bool changed = false;
+
   for (ushort i = 0; i < height; i++) {
-    for (ushort j = 0; j < SPRITE_WIDTH; j++) {
-      xshift = nregister[vx] + j;
-      yshift = nregister[vy] + i;
-      if ((xshift < screen::W_WIDTH) && (yshift < screen::W_HEIGHT)) {
-        // pixel position. the y axis needs to be flipped
-        pos = screen::W_WIDTH * (screen::W_HEIGHT - yshift) + xshift;
-        // extract each pixel to paint from sprite, big endian order
-        pixel = (memory[iregister + i] & (1 << (SPRITE_WIDTH - 1 - j))) == 0 ? 0 : 1;
-        if (!changed && pixel == 1 && pixels[pos] == 1)
-          changed = true;
-        pixels[pos] = pixel ^ pixels[pos];
-      }
-    }
+    byte yshift = nregister[vy] + i;
+    if ((xshift >= screen::W_WIDTH) || (yshift >= screen::W_HEIGHT))
+      break;
+
+    pos -= screen::W_WIDTH / 8;
+    // extract each byte to paint from sprite, big endian order
+    byte pixel = memory[iregister + i];
+    // shift and reposition the row bits according to starting position
+    byte newpixel = pixel >> xrelshift;
+    byte fornext = pixel << (8 - xrelshift);
+
+    if (!changed && ((pixels[pos] & newpixel) || (pixels[pos] & fornext)))
+      changed = true;
+    pixels[pos] ^= newpixel;
+    pixels[pos + 1] ^= fornext;
   }
   return changed;
 }
@@ -42,7 +46,7 @@ int Executer::execute(ushort operation, Instruction instruction) {
     pc = stack[--sp];
     break;
   case Instruction::CLEAR_SCR:
-    memset(pixels, 0, screen::W_WIDTH * screen::W_HEIGHT);
+    memset(pixels, 0, screen::W_WIDTH * screen::W_HEIGHT / 8);
     break;
   case Instruction::JUMP:
     pc = util::get_addr(operation);

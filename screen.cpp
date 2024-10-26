@@ -71,21 +71,25 @@ Screen::Screen() {
   glBindVertexArray(0);
 }
 
-int Screen::updatePixels(GLubyte *dst, char *pixels,
+int Screen::updatePixels(GLubyte *dst, unsigned char *pixels,
                          uint drawColor = DRAW_COLOR, uint bgColor = BG_COLOR,
                          int width = W_WIDTH, int height = W_HEIGHT) {
   if (!dst || !pixels)
     return -1;
 
   int *ptr = (int *)dst;
-  for (int i = 0; i < height; ++i)
-    for (int j = 0; j < width; ++j)
-      *ptr++ = *pixels++ == 1 ? drawColor : bgColor;
-
+  uint sz = width * height / 8;
+  for (uint i = 0; i < sz; ++i) {
+    unsigned char pixelRow = *pixels++;
+    for (uint j = 0; j < emulation::SPRITE_WIDTH; ++j) {
+      unsigned char mask = (1 << (emulation::SPRITE_WIDTH - j - 1));
+      *ptr++ = (pixelRow & mask) ? drawColor : bgColor;
+    }
+  }
   return 0;
 }
 
-int Screen::render(char *pixels) {
+int Screen::render(unsigned char *pixels) {
   glClearColor(0, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
