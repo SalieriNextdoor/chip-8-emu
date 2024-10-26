@@ -2,7 +2,7 @@
 #include <stdexcept>
 using namespace emulation;
 
-Emulator::Emulator(const char *filepath) : executer{memory} {
+Emulator::Emulator(const char *filepath) : executor{memory} {
   FILE *file = fopen(filepath, "rb");
   if (file == NULL)
     throw std::invalid_argument(std::string{"Couldn't open ROM file at "} +
@@ -19,8 +19,8 @@ Emulator::Emulator(const char *filepath) : executer{memory} {
 }
 
 ushort Emulator::fetch() {
-  ushort pc = executer.getpc();
-  if (executer.valid_instruction())
+  ushort pc = executor.getpc();
+  if (executor.valid_instruction())
     return (memory[pc] << 8) | memory[pc + 1];
   else
     throw std::out_of_range("Invalid instruction: pc was " + std::to_string(pc));
@@ -34,9 +34,9 @@ void Emulator::processInput(GLFWwindow *window) {
 int Emulator::run() {
   ushort next = fetch();
   Instruction inst = parser.read(next);
-  executer.execute(next, inst);
+  executor.execute(next, inst);
 
   processInput(emuScreen.window);
 
-  return emuScreen.render(executer.getpixels());
+  return emuScreen.render(executor.getpixels());
 }

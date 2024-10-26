@@ -1,13 +1,13 @@
-#include "executer.h"
+#include "executor.h"
 #include "constants.h"
 #include "util.h"
 #include <cmath>
 #include <cstring>
 using namespace emulation;
 
-Executer::Executer(byte *memory) : memory{memory} {}
+Executor::Executor(byte *memory) : memory{memory} {}
 
-bool Executer::draw_sprite(ushort operation, byte vx, byte vy) {
+bool Executor::draw_sprite(ushort operation, byte vx, byte vy) {
   byte height = util::get_nth_nibble(operation, 0);
   byte xshift = nregister[vx], xrelshift = xshift % 8;
   // pixel position. the y axis needs to be flipped
@@ -35,7 +35,7 @@ bool Executer::draw_sprite(ushort operation, byte vx, byte vy) {
   return changed;
 }
 
-int Executer::execute(ushort operation, Instruction instruction) {
+int Executor::execute(ushort operation, Instruction instruction) {
   byte vx = util::get_nth_nibble(operation, 2),
        vy = util::get_nth_nibble(operation, 1);
 

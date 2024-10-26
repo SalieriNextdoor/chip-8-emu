@@ -2,7 +2,7 @@
 #define CHIP8_EMULATOR_H
 
 #include "constants.h"
-#include "executer.h"
+#include "executor.h"
 #include "parser.h"
 #include "screen.h"
 
@@ -15,7 +15,7 @@ class Emulator {
 
   screen::Screen emuScreen;
   Parser parser;
-  Executer executer;
+  Executor executor;
 
   long sz;
 

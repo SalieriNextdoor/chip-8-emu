@@ -1,5 +1,5 @@
-#ifndef CHIP8_EXECUTER_H
-#define CHIP8_EXECUTER_H
+#ifndef CHIP8_EXECUTOR_H
+#define CHIP8_EXECUTOR_H
 
 #include "constants.h"
 #include "parser.h"
@@ -7,7 +7,7 @@
 namespace emulation {
 using ushort = unsigned short;
 using byte = unsigned char;
-class Executer {
+class Executor {
   byte *memory;
   ushort stack[STACK_SIZE] = {0};
   byte sp = 0;
@@ -20,7 +20,7 @@ class Executer {
   bool draw_sprite(ushort operation, byte vx, byte vy);
 
 public:
-  Executer(byte *memory);
+  Executor(byte *memory);
   int execute(ushort operation, Instruction instruction);
 
   bool inline valid_instruction() const {
