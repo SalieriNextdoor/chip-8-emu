@@ -156,6 +156,9 @@ int Executor::execute(ushort operation, Instruction instruction,
   case Instruction::ADD_INDEX_VX:
     iregister += nregister[vx];
     break;
+  case Instruction::SET_INDEX_SPRITE:
+    iregister = FONT_START_ADDR + FONT_HEIGHT * nregister[vx];
+    break;
   case Instruction::STORE_BIN_DEC_VX:
     for (int i = 0; i < 3; i++)
       memory[iregister + i] = (nregister[vx] / ((int)pow(10, 2 - i))) % 10;
@@ -180,7 +183,8 @@ int Executor::execute(ushort operation, Instruction instruction,
       nregister[i] = memory[iregister++];
     break;
   default:
-    throw std::runtime_error("Invalid operation \'" + std::to_string(operation) + "\'");
+    throw std::runtime_error("Invalid operation \'" +
+                             std::to_string(operation) + "\'");
   }
 
   if (increment)

@@ -34,6 +34,8 @@ Instruction Parser::read_F_operations(ushort operation) {
     return Instruction::STORE_VX_KEY;
   case 0xF01E:
     return Instruction::ADD_INDEX_VX;
+  case 0xF029:
+    return Instruction::SET_INDEX_SPRITE;
   case 0xF033:
     return Instruction::STORE_BIN_DEC_VX;
   case 0xF055:

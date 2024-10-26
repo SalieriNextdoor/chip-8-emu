@@ -1,4 +1,5 @@
 #include "emulator.h"
+#include "constants.h"
 #include <stdexcept>
 using namespace emulation;
 
@@ -18,6 +19,13 @@ Emulator::Emulator(const char *filepath) : executor{memory} {
   }
   fread(&memory[START_INSTRUCTIONS], sizeof(char), sz, file);
   fclose(file);
+
+  setFonts(FONT_HEX, sizeof(FONT_HEX));
+}
+
+void Emulator::setFonts(const byte *font, uint length, ushort startAddr) {
+  for (int i = startAddr; i < length; i++)
+    memory[i] = font[i];
 }
 
 ushort Emulator::fetch() {
