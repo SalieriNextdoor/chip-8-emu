@@ -11,11 +11,12 @@ namespace emulation {
 using byte = unsigned char;
 using ushort = unsigned short;
 class Emulator {
+  byte memory[MEM_SIZE] = {0};
+
   screen::Screen emuScreen;
   Parser parser;
   Executer executer;
 
-  byte memory[MEM_SIZE] = {0};
   long sz;
 
   ushort fetch();
