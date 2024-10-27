@@ -36,7 +36,7 @@ void AudioHandler::playTone() {
   int frameCount = SAMPLE_RATE / 10;
   int16_t *buffer = new int16_t[frameCount];
 
-  int sampleIndex = 0;
+  unsigned int sampleIndex = 0;
 
   while (*timer > 0) {
     for (int i = 0; i < frameCount; ++i) {
