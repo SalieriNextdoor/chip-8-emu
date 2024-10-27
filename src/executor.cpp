@@ -15,28 +15,31 @@ Executor::Executor(byte *memory) : memory{memory} {}
 
 bool Executor::draw_sprite(ushort operation, byte vx, byte vy) {
   byte height = util::get_nth_nibble(operation, 0);
-  byte xshift = nregister[vx], xrelshift = xshift % 8;
-  // pixel position. the y axis needs to be flipped
-  ushort pos =
-      (screen::W_WIDTH / 8) * (screen::W_HEIGHT - nregister[vy]) + xshift / 8;
+  byte xshift = (nregister[vx] % screen::W_WIDTH) / emulation::SPRITE_WIDTH;
+  byte yshift = nregister[vy] % screen::W_HEIGHT;
+  byte xrelshift = nregister[vx] % emulation::SPRITE_WIDTH;
+  // we must flip the y axis
+  uint pos = (screen::W_WIDTH / emulation::SPRITE_WIDTH) *
+                   (screen::W_HEIGHT - yshift) + xshift;
   bool changed = false;
 
   for (ushort i = 0; i < height; i++) {
-    byte yshift = nregister[vy] + i;
-    if ((xshift >= screen::W_WIDTH) || (yshift >= screen::W_HEIGHT))
+    if (yshift + i >= screen::W_HEIGHT)
       break;
 
-    pos -= screen::W_WIDTH / 8;
+    pos -= screen::W_WIDTH / emulation::SPRITE_WIDTH;
     // extract each byte to paint from sprite, big endian order
     byte pixel = memory[iregister + i];
     // shift and reposition the row bits according to starting position
     byte newpixel = pixel >> xrelshift;
-    byte fornext = pixel << (8 - xrelshift);
+    byte fornext = pixel << (emulation::SPRITE_WIDTH - xrelshift);
 
     if (!changed && ((pixels[pos] & newpixel) || (pixels[pos] & fornext)))
       changed = true;
     pixels[pos] ^= newpixel;
-    pixels[pos + 1] ^= fornext;
+    // we clip the second part if the sprite starts at the last stripe of the row
+    if ((pos + 1) % emulation::SPRITE_WIDTH != 0)
+      pixels[pos + 1] ^= fornext;
   }
   return changed;
 }
@@ -206,7 +209,7 @@ int Executor::execute(ushort operation, Instruction instruction,
       nregister[i] = memory[iregister++];
     break;
   default:
-    throw std::runtime_error("Invalid operation \'" +
+    throw std::runtime_error("Invalid operation \';" +
                              std::to_string(operation) + "\'");
   }
 
@@ -221,8 +224,7 @@ void Executor::countdown() {
   auto lastTime = high_resolution_clock::now();
   for (;;) {
     auto currentTime = high_resolution_clock::now();
-    auto elapsed = duration_cast<microseconds>(
-        currentTime - lastTime);
+    auto elapsed = duration_cast<microseconds>(currentTime - lastTime);
 
     if (elapsed.count() >= 16667) { // ~1/60th of a second, for 60hz
       if (delayTimer > 0)
@@ -249,8 +251,7 @@ void Executor::interrupt() {
   auto lastTime = high_resolution_clock::now();
   for (;;) {
     auto currentTime = high_resolution_clock::now();
-    auto elapsed = duration_cast<microseconds>(
-        currentTime - lastTime);
+    auto elapsed = duration_cast<microseconds>(currentTime - lastTime);
 
     if (elapsed.count() >= 16667) { // ~1/60th of a second, for 60hz
       canDraw = true;
