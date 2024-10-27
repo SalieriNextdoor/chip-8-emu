@@ -1,6 +1,8 @@
 #include "emulator.h"
 #include "constants.h"
+#include "executor.h"
 #include <stdexcept>
+#include <thread>
 using namespace emulation;
 
 ushort lastKey = 0;
@@ -21,10 +23,13 @@ Emulator::Emulator(const char *filepath) : executor{memory} {
   fclose(file);
 
   setFonts(FONT_HEX, sizeof(FONT_HEX));
+  std::thread timerThread{[](Executor *executor) { executor->countdown(); },
+                          &executor};
+  timerThread.detach();
 }
 
 void Emulator::setFonts(const byte *font, uint length, ushort startAddr) {
-  for (int i = startAddr; i < length; i++)
+  for (uint i = startAddr; i < length; i++)
     memory[i] = font[i];
 }
 

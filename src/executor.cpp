@@ -1,10 +1,14 @@
 #include "executor.h"
+#include "audiohandler.h"
 #include "constants.h"
+#include "parser.h"
 #include "util.h"
+#include <chrono>
 #include <cmath>
 #include <cstring>
 #include <random>
 #include <stdexcept>
+#include <thread>
 using namespace emulation;
 
 Executor::Executor(byte *memory) : memory{memory} {}
@@ -165,6 +169,9 @@ int Executor::execute(ushort operation, Instruction instruction,
     for (int i = 0; i < 3; i++)
       memory[iregister + i] = (nregister[vx] / ((int)pow(10, 2 - i))) % 10;
     break;
+  case Instruction::STORE_DTIMER_VX:
+    nregister[vx] = delayTimer;
+    break;
   case Instruction::STORE_VX_KEY:
     if (lastKey == 0x00)
       increment = false;
@@ -175,6 +182,12 @@ int Executor::execute(ushort operation, Instruction instruction,
       increment = false;
     else
       waitingKey = 0x00;
+    break;
+  case Instruction::SET_DTIMER_VX:
+    delayTimer = nregister[vx];
+    break;
+  case Instruction::SET_STIMER_VX:
+    soundTimer = nregister[vx];
     break;
   case Instruction::STORE_VX_RANGE:
     for (int i = 0; i <= vx; i++)
@@ -192,4 +205,31 @@ int Executor::execute(ushort operation, Instruction instruction,
   if (increment)
     increment_pc();
   return 0;
+}
+
+void Executor::countdown() {
+  auto lastTime = std::chrono::high_resolution_clock::now();
+
+  for (;;) {
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+        currentTime - lastTime);
+
+    if (elapsed.count() >= 16667) { // ~1/60th of a second, for 60hz
+      if (delayTimer > 0)
+        delayTimer--;
+      if (soundTimer > 0) {
+        if (!audio.playing.exchange(true)) {
+          std::thread audioThread{
+              [](audio::AudioHandler *audio) { audio->playTone(); }, &audio};
+          audioThread.detach();
+        }
+        soundTimer--;
+      }
+      lastTime = currentTime;
+    }
+
+    // Small sleep to prevent high CPU usage
+    std::this_thread::sleep_for(std::chrono::microseconds(100));
+  }
 }
