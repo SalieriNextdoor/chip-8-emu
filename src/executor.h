@@ -20,7 +20,7 @@ class Executor {
   std::atomic<byte> delayTimer{0}, soundTimer{0};
   audio::AudioHandler audio{&soundTimer};
 
-  byte pixels[screen::W_WIDTH * screen::W_HEIGHT / emulation::SPRITE_WIDTH] = {0};
+  byte pixels[screen::PIXEL_MAP_SIZE] = {0};
 
   std::atomic_bool canDraw = true;
   bool draw_sprite(ushort operation, byte vx, byte vy);
