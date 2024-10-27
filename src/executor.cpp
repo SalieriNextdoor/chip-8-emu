@@ -20,7 +20,7 @@ bool Executor::draw_sprite(ushort operation, byte vx, byte vy) {
   byte xrelshift = nregister[vx] % emulation::SPRITE_WIDTH;
   // we must flip the y axis
   uint pos = (screen::W_WIDTH / emulation::SPRITE_WIDTH) *
-                   (screen::W_HEIGHT - yshift) + xshift;
+                 (screen::W_HEIGHT - yshift) + xshift;
   bool changed = false;
 
   for (ushort i = 0; i < height; i++) {
@@ -209,7 +209,7 @@ int Executor::execute(ushort operation, Instruction instruction,
       nregister[i] = memory[iregister++];
     break;
   default:
-    throw std::runtime_error("Invalid operation \';" +
+    throw std::runtime_error("Invalid operation \'" +
                              std::to_string(operation) + "\'");
   }
 

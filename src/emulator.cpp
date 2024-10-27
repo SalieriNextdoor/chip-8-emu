@@ -1,6 +1,7 @@
 #include "emulator.h"
 #include "constants.h"
 #include "executor.h"
+#include <GLFW/glfw3.h>
 #include <chrono>
 #include <stdexcept>
 #include <thread>
@@ -51,52 +52,52 @@ ushort Emulator::fetch() {
 void Emulator::processInput(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
-  if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_0) == GLFW_PRESS)
     lastKey |= 1;
   else
     lastKey &= ~1;
 
-  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_1) == GLFW_PRESS)
     lastKey |= 1 << 1;
   else
     lastKey &= ~(1 << 1);
 
-  if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
     lastKey |= 1 << 2;
   else
     lastKey &= ~(1 << 2);
 
-  if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_3) == GLFW_PRESS)
     lastKey |= 1 << 3;
   else
     lastKey &= ~(1 << 3);
 
-  if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
     lastKey |= 1 << 4;
   else
     lastKey &= ~(1 << 4);
 
-  if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_5) == GLFW_PRESS)
     lastKey |= 1 << 5;
   else
     lastKey &= ~(1 << 5);
 
-  if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
     lastKey |= 1 << 6;
   else
     lastKey &= ~(1 << 6);
 
-  if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_7) == GLFW_PRESS)
     lastKey |= 1 << 7;
   else
     lastKey &= ~(1 << 7);
 
-  if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
     lastKey |= 1 << 8;
   else
     lastKey &= ~(1 << 8);
 
-  if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
     lastKey |= 1 << 9;
   else
     lastKey &= ~(1 << 9);
