@@ -22,6 +22,7 @@ class Executor {
 
   byte pixels[screen::W_WIDTH * screen::W_HEIGHT / emulation::SPRITE_WIDTH] = {0};
 
+  std::atomic_bool canDraw = true;
   bool draw_sprite(ushort operation, byte vx, byte vy);
 
 public:
@@ -35,6 +36,7 @@ public:
   ushort getpc() const { return pc; };
 
   void countdown();
+  void interrupt();
 
   byte *getpixels() { return pixels; }
 };

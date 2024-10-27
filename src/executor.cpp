@@ -149,6 +149,11 @@ int Executor::execute(ushort operation, Instruction instruction,
     increment = false;
     break;
   case Instruction::DRAW_SPRITE:
+    if (!canDraw) {
+      increment = false;
+      break;
+    }
+    canDraw = false;
     if (draw_sprite(operation, vx, vy))
       nregister[15] = 0x01;
     else
@@ -230,6 +235,25 @@ void Executor::countdown() {
         }
         soundTimer--;
       }
+      lastTime = currentTime;
+    }
+
+    // Small sleep to prevent high CPU usage
+    std::this_thread::sleep_for(microseconds(100));
+  }
+}
+
+void Executor::interrupt() {
+  using namespace std::chrono;
+
+  auto lastTime = high_resolution_clock::now();
+  for (;;) {
+    auto currentTime = high_resolution_clock::now();
+    auto elapsed = duration_cast<microseconds>(
+        currentTime - lastTime);
+
+    if (elapsed.count() >= 16667) { // ~1/60th of a second, for 60hz
+      canDraw = true;
       lastTime = currentTime;
     }
 
