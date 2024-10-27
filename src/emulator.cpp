@@ -25,9 +25,13 @@ Emulator::Emulator(const char *filepath, ushort cpf, ushort fps)
   fclose(file);
 
   setFonts(FONT_HEX, sizeof(FONT_HEX));
+
   std::thread timerThread{[](Executor *executor) { executor->countdown(); },
                           &executor};
   timerThread.detach();
+  std::thread interruptThread{[](Executor *executor) { executor->interrupt(); },
+                          &executor};
+  interruptThread.detach();
 }
 
 void Emulator::setFonts(const byte *font, uint length, ushort startAddr) {
