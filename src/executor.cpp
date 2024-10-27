@@ -90,12 +90,15 @@ int Executor::execute(ushort operation, Instruction instruction,
     break;
   case Instruction::ORLOAD_VY_VX:
     nregister[vx] |= nregister[vy];
+    nregister[15] = 0x00;
     break;
   case Instruction::ANDLOAD_VY_VX:
     nregister[vx] &= nregister[vy];
+    nregister[15] = 0x00;
     break;
   case Instruction::XOR_LOAD_VY_VX:
     nregister[vx] ^= nregister[vy];
+    nregister[15] = 0x00;
     break;
   case Instruction::ADD_VY_VX:
     op = nregister[vx] + nregister[vy];
