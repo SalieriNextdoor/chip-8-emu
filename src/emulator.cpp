@@ -157,5 +157,7 @@ void Emulator::run() {
         return;
       last = current;
     }
+    else // Small sleep to prevent high CPU usage
+      std::this_thread::sleep_for(microseconds(100));
   }
 }
