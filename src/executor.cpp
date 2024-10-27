@@ -211,11 +211,12 @@ int Executor::execute(ushort operation, Instruction instruction,
 }
 
 void Executor::countdown() {
-  auto lastTime = std::chrono::high_resolution_clock::now();
+  using namespace std::chrono;
 
+  auto lastTime = high_resolution_clock::now();
   for (;;) {
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+    auto currentTime = high_resolution_clock::now();
+    auto elapsed = duration_cast<microseconds>(
         currentTime - lastTime);
 
     if (elapsed.count() >= 16667) { // ~1/60th of a second, for 60hz
@@ -233,6 +234,6 @@ void Executor::countdown() {
     }
 
     // Small sleep to prevent high CPU usage
-    std::this_thread::sleep_for(std::chrono::microseconds(100));
+    std::this_thread::sleep_for(microseconds(100));
   }
 }

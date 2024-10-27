@@ -33,6 +33,10 @@ using ushort = unsigned short;
 using uint = unsigned int;
 using byte = unsigned char;
 
+
+const ushort CYCLES_PER_FRAME = 11;
+const ushort FRAMES_PER_SECOND = 60;
+
 const ushort START_INSTRUCTIONS = 0x200;
 const ushort END_INSTRUCTIONS = 0xFFF;
 const uint MEM_SIZE = 4096;

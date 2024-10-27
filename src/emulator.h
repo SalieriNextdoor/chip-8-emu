@@ -18,16 +18,19 @@ class Emulator {
   Executor executor;
 
   long sz;
+  ushort cpf, fps;
 
   void setFonts(const byte *fonts, uint length, ushort startAddr = FONT_START_ADDR);
 
   ushort fetch();
 
+  void run_cycle();
+
   void processInput(GLFWwindow *window);
 
 public:
-  Emulator(const char *filepath);
-  int run();
+  Emulator(const char *filepath, ushort cpf, ushort fps);
+  void run();
 };
 } // namespace emulation
 
