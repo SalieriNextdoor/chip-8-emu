@@ -63,4 +63,11 @@ const ushort FONT_START_ADDR = 0x00;
 const byte FONT_HEIGHT = 0x05;
 }; // namespace emulation
 
+namespace audio {
+const char *const AUDIO_DEVICE = "default";
+const unsigned int SAMPLE_RATE = 44100;
+const int FREQUENCY = 440;
+const int AMPLITUDE = 30000;
+}; // namespace audio
+
 #endif

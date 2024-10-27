@@ -1,8 +1,10 @@
 #ifndef CHIP8_EXECUTOR_H
 #define CHIP8_EXECUTOR_H
 
+#include "audiohandler.h"
 #include "constants.h"
 #include "parser.h"
+#include <atomic>
 
 namespace emulation {
 using ushort = unsigned short;
@@ -15,7 +17,8 @@ class Executor {
   ushort iregister = 0;
   ushort pc = START_INSTRUCTIONS;
   
-  byte delayTimer = 0, soundTimer = 0;
+  std::atomic<byte> delayTimer{0}, soundTimer{0};
+  audio::AudioHandler audio{&soundTimer};
 
   byte pixels[screen::W_WIDTH * screen::W_HEIGHT / emulation::SPRITE_WIDTH] = {0};
 
@@ -30,6 +33,8 @@ public:
   }
   void inline increment_pc() { pc += 2; }
   ushort getpc() const { return pc; };
+
+  void countdown();
 
   byte *getpixels() { return pixels; }
 };
