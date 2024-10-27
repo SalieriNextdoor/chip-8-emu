@@ -1,13 +1,15 @@
 #include "emulator.h"
 #include "constants.h"
 #include "executor.h"
+#include <chrono>
 #include <stdexcept>
 #include <thread>
 using namespace emulation;
 
 ushort lastKey = 0;
 
-Emulator::Emulator(const char *filepath) : executor{memory} {
+Emulator::Emulator(const char *filepath, ushort cpf, ushort fps)
+    : executor{memory}, cpf{cpf}, fps{fps} {
   FILE *file = fopen(filepath, "rb");
   if (file == NULL)
     throw std::invalid_argument(std::string{"Couldn't open ROM file at "} +
@@ -126,12 +128,29 @@ void Emulator::processInput(GLFWwindow *window) {
     lastKey &= ~(1 << 15);
 }
 
-int Emulator::run() {
+void Emulator::run_cycle() {
+  processInput(emuScreen.window);
+
   ushort next = fetch();
   Instruction inst = parser.read(next);
   executor.execute(next, inst, lastKey);
+}
 
-  processInput(emuScreen.window);
+void Emulator::run() {
+  using namespace std::chrono;
 
-  return emuScreen.render(executor.getpixels());
+  auto last = high_resolution_clock::now();
+  for (;;) {
+    auto current = high_resolution_clock::now();
+    auto elapsed = duration_cast<microseconds>(current - last);
+
+    if (elapsed.count() >= (int)(1.0f / fps * 10e5)) {
+      for (ushort i = 0; i < cpf; i++)
+        run_cycle();
+
+      if (emuScreen.render(executor.getpixels()))
+        return;
+      last = current;
+    }
+  }
 }
