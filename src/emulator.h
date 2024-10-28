@@ -98,7 +98,7 @@ public:
    * It also starts two threads, one for the both the delay and
    * sound timers, and another one for the draw interrupt.
    * @see emulation::Executor::countdown
-   * @see emulation::Executor::detach
+   * @see emulation::Executor::interrupt 
    */
   Emulator(const char *filepath, ushort cpf, ushort fps);
 
