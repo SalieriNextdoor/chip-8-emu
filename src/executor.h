@@ -54,7 +54,7 @@ class Executor {
    * for the case where the starting x position is not divisible
    * by 8.
    *
-   * If the sprite starting coordiantes are outside the screen 
+   * If the sprite starting coordinates are outside the screen 
    * coordinates, it wraps back through the other edge. If the sprite 
    * starts within the screen but goes outside which through either of
    * the edges, the outside part is clipped.
