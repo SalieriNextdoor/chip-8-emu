@@ -1,3 +1,12 @@
+/**
+ * @file shader.h
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Declares and implements shader-related functionality.
+ */
+
 #ifndef SHADER_H
 #define SHADER_H
 

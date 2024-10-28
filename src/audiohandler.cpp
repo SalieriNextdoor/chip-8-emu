@@ -1,3 +1,11 @@
+/**
+ * @file audiohandler.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements the audio functionality.
+ */
 #include "audiohandler.h"
 #include "constants.h"
 #include <alsa/asoundlib.h>

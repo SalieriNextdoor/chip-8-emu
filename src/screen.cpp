@@ -1,7 +1,17 @@
+/**
+ * @file screen.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements the screen functionality.
+ */
+
 #include "screen.h"
 #include "constants.h"
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 using namespace screen;
 
 void Screen::framebuffer_size_callback(GLFWwindow *window, int width,
@@ -17,14 +27,13 @@ Screen::Screen() {
 
   window = glfwCreateWindow(W_WIDTH * SCR_SIZE_MULT, W_HEIGHT * SCR_SIZE_MULT,
                             windowName, NULL, NULL);
-  if (window == NULL) {
-    std::cout << "Failed to create GLFW window" << std::endl;
-  }
+  if (window == NULL)
+    throw std::runtime_error("Failed to create GLFW window");
+
   glfwMakeContextCurrent(window);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cout << "Failed to initialize GLAD" << std::endl;
-  }
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    throw std::runtime_error("Failed to initialize GLAD");
 
   glViewport(0, 0, W_WIDTH * SCR_SIZE_MULT, W_HEIGHT * SCR_SIZE_MULT);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

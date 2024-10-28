@@ -1,3 +1,12 @@
+/**
+ * @file parser.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements the operation code parsing functionality.
+ */
+
 #include "parser.h"
 #include <stdexcept>
 using namespace emulation;

@@ -1,3 +1,12 @@
+/**
+ * @file util.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements utility functions.
+ */
+
 #include "util.h"
 #include <random>
 

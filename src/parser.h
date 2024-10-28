@@ -1,7 +1,20 @@
+/**
+ * @file parser.h
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Declares the operation code parsing functionality.
+ */
+
 #ifndef CHIP8_PARSER_8
 #define CHIP8_PARSER_8
 
 namespace emulation {
+
+/*
+ * @brief Represents an operation to be executed.
+ * */
 enum class Instruction {
   RETURN_SUBROUTINE,
   CLEAR_SCR,
@@ -41,11 +54,41 @@ enum class Instruction {
 };
 
 using ushort = unsigned short;
+/**
+ * @brief Defines the methods of operation parsing.
+ */
 class Parser {
+  /**
+   * @brief Convert codes starting in 8 into an Instruction enum.
+   *
+   * @param operation operation code
+   * @return the corresponding Instruction
+   * @see emulation::Instruction
+   *
+   * This throws a runtiem error exception if the operation code is invalid.
+   */
   Instruction read_reg_binary_operations(ushort operation);
+  /**
+   * @brief Convert codes starting in F into an Instruction enum.
+   *
+   * @param operation operation code
+   * @return the corresponding Instruction
+   * @see emulation::Instruction
+   *
+   * This throws a runtime_error exception if the operation code is invalid.
+   */
   Instruction read_F_operations(ushort operation);
 
 public:
+  /**
+   * @brief Convert codes into an Instruction enum.
+   *
+   * @param operation operation code
+   * @return the corresponding Instruction
+   * @see emulation::Instruction
+   *
+   * This throws a runtime error exception if the operation code is invalid.
+   */
   Instruction read(ushort operation);
 };
 }; // namespace emulation
