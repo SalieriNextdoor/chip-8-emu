@@ -1,5 +1,8 @@
 *.o
 chip8
 *.ch8
+*.pdf
 Lib/
 Include/
+Docs/html
+Docs/latex

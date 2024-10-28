@@ -1,3 +1,12 @@
+/**
+ * @file emulator.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements the main emulator functionality.
+ */
+
 #include "emulator.h"
 #include "constants.h"
 #include "executor.h"

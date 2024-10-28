@@ -1,3 +1,12 @@
+/**
+ * @file constants.h
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Various constants.
+ */
+
 #ifndef CHIP8_CONSTANTS_H
 #define CHIP8_CONSTANTS_H
 #include "Include/glad/glad.h"

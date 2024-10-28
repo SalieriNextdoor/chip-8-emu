@@ -1,3 +1,12 @@
+/**
+ * @file executor.cpp
+ * @copyright
+ * Copyright 2024 Rafael Spinassé
+ * Licensed under MIT license
+ *
+ * @brief Implements the execution functionality.
+ */
+
 #include "executor.h"
 #include "audiohandler.h"
 #include "constants.h"
@@ -44,7 +53,7 @@ bool Executor::draw_sprite(ushort operation, byte vx, byte vy) {
   return changed;
 }
 
-int Executor::execute(ushort operation, Instruction instruction,
+void Executor::execute(ushort operation, Instruction instruction,
                       ushort lastKey) {
   byte vx = util::get_nth_nibble(operation, 2),
        vy = util::get_nth_nibble(operation, 1);
@@ -215,7 +224,6 @@ int Executor::execute(ushort operation, Instruction instruction,
 
   if (increment)
     increment_pc();
-  return 0;
 }
 
 void Executor::countdown() {
